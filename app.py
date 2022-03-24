@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request
 from config import DevelopmentConfig
 import json
@@ -12,10 +11,7 @@ import cx_Oracle
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 
-
 # Path for dataBase connection Oracle
-
-
 @app.route('/con')
 def connection():
     #   getting credentials from the method get_credentials_db
@@ -34,15 +30,11 @@ def connection():
     return col
 
 # Default server path
-
-
 @app.route('/')
 def init():
   return index()
 
 # Path for login view
-
-
 @app.route('/login')
 def index():
   message = ""
@@ -50,8 +42,6 @@ def index():
 
 
 # Path for login into a user
-
-
 @app.route('/loginUser', methods=['POST'])
 def logging_user():
   if request.method == 'POST':
@@ -104,16 +94,12 @@ def logging_user():
     return render_template('login.html', message=message)
 
 # Path for register template
-
-
 @app.route('/register')
 def view_register():
   message = ""
   return render_template('register.html', message=message)
 
 # Path to register a user
-
-
 @app.route('/saveUser', methods=['POST'])
 def register_user():
   if request.method == 'POST':
@@ -159,8 +145,6 @@ def register_user():
     return render_template('register.html', message=message)
 
 # Path for view mail user
-
-
 @app.route('/mail', methods=['POST'])
 def view_mail_main():
   # From POST method, we request the inputs from the view
@@ -195,8 +179,6 @@ def view_mail_main():
     return render_template('login.html')
 
 # Path for view send mail
-
-
 @app.route('/viewSendMail', methods=['POST'])
 def view_send_mail():
   # From POST method, we request the inputs from the view
@@ -231,8 +213,6 @@ def view_send_mail():
     return render_template('sendMail.html', email=_email)
 
 # Path for sending an email
-
-
 @app.route('/sendMail', methods=['POST'])
 def send_mail():
   # From POST method, we request the inputs from the view
