@@ -8,16 +8,17 @@ import getpass
 import poplib
 import cx_Oracle
 
-
 # Global
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 
 
 # Path for dataBase connection Oracle
+
+
 @app.route('/con')
 def connection():
-    #   getting credentials from the method get_credentials_db   
+    #   getting credentials from the method get_credentials_db
     cdtls = get_credentials_db()
     print(f"Credentials: {cdtls}")
     #   making connection from impor cx_oracle, and passing the parameters into the dicctionary for conecction
@@ -33,42 +34,35 @@ def connection():
     return col
 
 # Default server path
+
+
 @app.route('/')
 def init():
-    return 'Running'
-
+  return index()
 
 # Path for login view
+
+
 @app.route('/login')
 def index():
-    return 'test'
+  message = ""
+  return render_template('login.html', message=message)
 
-
-# Send an email
-@app.route('/send')
-def send():
-    # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
-    # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
-    from_addr = "Desde prueba <correox@redestres.udistrital.edu.co>"
-    to_addr = "Hacia prueba <usuario01@redestres.udistrital.edu.co>"
-
-    message = "Hola! Este es un e-mail enviando desde Python"
-
-    # creamos un objeto smtp y realizamos el envío:
-    smtp = smtplib.SMTP('localhost', 25)
-    smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=message)
-    return 'test'
 
 # Path for login into a user
-@app.route('/loginUser',methods=['POST'])
+
+
+@app.route('/loginUser', methods=['POST'])
 def logging_user():
   if request.method == 'POST':
     # From POST method, we request the inputs from the view
     _email = request.form['emailAddress']
     _password = request.form['password']
     try:
-      # Query para extrar la contraseña de la BD
+      # Query for the password for the DB
       sqlGetPass = f"""SELECT u.password FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
       # Bring the credentials from JSON to use in DB
       cdtls = get_credentials_db()
       try:
@@ -84,6 +78,9 @@ def logging_user():
         # fetch to get password
         fetch = cur.fetchall()[0]
         password = fetch[0]
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
         # closing cursor
         cur.close()
         # closing connection
@@ -91,29 +88,33 @@ def logging_user():
         if password == _password:
           # succesfull message
           message = "Ingresando"
-          return render_template('login.html',message = message)
+          return render_template('mail.html', user=user)
         else:
           # succesfull message
           message = "Datos no coinciden"
-          return render_template('login.html',message = message)  
+          return render_template('login.html', message=message)
       except cx_Oracle.Error as error:
         print('Error occurred:')
         print(error)
         #   error message for view
         message = "No pudimos hacer su solicitud"
     except:
-      message = "Algo salio mal"
-      return render_template('register.html',message = message)  
-    return render_template('bandeja.html',message = message)  
+      message = "No encontramos tu cuenta"
+      return render_template('register.html', message=message)
+    return render_template('login.html', message=message)
 
 # Path for register template
+
+
 @app.route('/register')
 def view_register():
   message = ""
-  return render_template('register.html', message = message)
+  return render_template('register.html', message=message)
 
 # Path to register a user
-@app.route('/saveUser',methods=['POST'])
+
+
+@app.route('/saveUser', methods=['POST'])
 def register_user():
   if request.method == 'POST':
     # From POST method, we request the inputs from the view
@@ -123,7 +124,7 @@ def register_user():
     _password = request.form['password']
     _rpassword = request.form['RepeatPassword']
     try:
-      if (comprobePasswords(_password,_rpassword) == True):
+      if (comprobePasswords(_password, _rpassword) == True):
         # Query for insert into usuario, format variable
         sqlInsUser = f"""INSERT INTO USUARIO (names,surnames,email,password)
                           VALUES ('{_names}','{_surnames}','{_email}','{_password}')"""
@@ -144,7 +145,7 @@ def register_user():
           connection.close()
           # succesfull message
           message = "Registro completado exitosamente"
-          return render_template('login.html',message = message)  
+          return render_template('login.html', message=message)
         except cx_Oracle.Error as error:
           print('Error occurred:')
           print(error)
@@ -154,8 +155,170 @@ def register_user():
         message = "contraseñas no coinciden"
     except:
       message = "Algo salio mal"
-      return render_template('register.html',message = message)  
-    return render_template('register.html',message = message) 
+      return render_template('register.html', message=message)
+    return render_template('register.html', message=message)
+
+# Path for view mail user
+
+
+@app.route('/mail', methods=['POST'])
+def view_mail_main():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('mail.html', user=user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html')
+
+# Path for view send mail
+
+
+@app.route('/viewSendMail', methods=['POST'])
+def view_send_mail():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('sendMail.html', user=user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('sendMail.html', email=_email)
+
+# Path for sending an email
+
+
+@app.route('/sendMail', methods=['POST'])
+def send_mail():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["emailAddress"]
+    _emailDes = request.form["emailDes"]
+    _message = request.form["texto"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        # Logic to send mail 1
+        
+        # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
+        # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
+        from_addr = "Desde prueba <correox@redestres.udistrital.edu.co>"
+        to_addr = "Hacia prueba <usuario01@redestres.udistrital.edu.co>"
+
+        message = "Hola! Este es un e-mail enviando desde Python"
+
+        # creamos un objeto smtp y realizamos el envío:
+        smtp = smtplib.SMTP('localhost', 25)
+        smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=message)
+        
+        # Logic to send mail 2
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        msg = 'Subject: {}\n\n{}'.format("Prueba Redes 3", _message)
+        
+       
+        # ingreso al correo de gmail
+        server.login('correo.base.de.datos.uno@gmail.com', 'basededatosunoprueba123')
+
+        # se envia el correo
+        server.sendmail(_email, _emailDes, msg)
+        server.quit()
+
+        '''
+        # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
+        # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
+        remitente = "Desde prueba <correo.base.de.datos.uno@gmail.com>"
+        destinatario = "Hacia prueba <luisocampo.o.g@gmail.com>"
+        asunto = "E-mal HTML enviado desde Python"
+        mensaje = """Hola!<br/> <br/>
+        Este es un <b>e-mail</b> enviando desde <b>Python</b>
+        """
+
+        # generamos el e-mail con todos los datos definidos anteriormente:
+        email = """From: %s
+        To: %s
+        MIME-Version: 1.0
+        Content-type: text/html
+        Subject: %s
+        %s
+        """ % (remitente, destinatario, asunto, mensaje)
+
+        # creamos un objeto smtp y realizamos el envío:
+        smtp = smtplib.SMTP('localhost')
+        smtp.sendmail(remitente, destinatario, email)
+        '''
+
+        mail.init_app(app)
+        return render_template('mail.html', user=user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html')
 
 #  Method that comprobe the passwords
 def comprobePasswords(p1,p2):
