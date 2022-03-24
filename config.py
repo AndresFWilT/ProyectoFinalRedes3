@@ -10,5 +10,5 @@ class Config(object):
     MAIL_PASSWORD = 'asd'
     MAIL_USE_TLS = True
 
-class DevelopmentConfig(config):
+class DevelopmentConfig(Config):
     Debug = True
