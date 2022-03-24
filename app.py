@@ -1,15 +1,17 @@
-from flask import Flask, render_template, request
-from flask_mail import Mail, Message
-from config import DevelopmentConfig
-import cx_Oracle
-import json
 
+from flask import Flask, render_template, request
+from config import DevelopmentConfig
+import json
+import os
 import smtplib
+import getpass
+import poplib
+import cx_Oracle
 
 # Global
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
-mail = Mail()
+
 
 # Path for dataBase connection Oracle
 
@@ -45,6 +47,7 @@ def init():
 def index():
   message = ""
   return render_template('login.html', message=message)
+
 
 # Path for login into a user
 
@@ -255,12 +258,26 @@ def send_mail():
         cur.close()
         # closing connection
         connection.close()
-        # Logic to send mail
+        # Logic to send mail 1
+        
+        # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
+        # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
+        from_addr = "Desde prueba <correox@redestres.udistrital.edu.co>"
+        to_addr = "Hacia prueba <usuario01@redestres.udistrital.edu.co>"
+
+        message = "Hola! Este es un e-mail enviando desde Python"
+
+        # creamos un objeto smtp y realizamos el envío:
+        smtp = smtplib.SMTP('localhost', 25)
+        smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=message)
+        
+        # Logic to send mail 2
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()
         server.starttls()
         msg = 'Subject: {}\n\n{}'.format("Prueba Redes 3", _message)
-
+        
+       
         # ingreso al correo de gmail
         server.login('correo.base.de.datos.uno@gmail.com', 'basededatosunoprueba123')
 
