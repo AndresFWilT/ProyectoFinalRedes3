@@ -11,12 +11,13 @@
 </head>
 
 <body>
+    <h4 class="text-center title">{{message}}</h1>
     <h1 class="text-center title">Crea una cuenta</h1>
     <a href="/" class="btn btn-secondary text-center text-uppercase" style="position: fixed; top: 0; left: 0">Volver a
         ingreso</a>
     <br />
     <div class="card text-center" style="width: 18rem; margin: auto">
-        <form action="/saveStudent" method="post">
+        <form action="/saveUser" method="post">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <label> Nombres </label>
@@ -41,14 +42,14 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <label> Contraseña </label>
-                    <input style="text-align: center" id="codeStudent" type="text" placeholder="Ingresa tu contraseña"
+                    <input style="text-align: center" id="password" type="password" placeholder="Ingresa tu contraseña"
                         required name="password" />
                 </li>
             </ul>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <label> Repetir contraseña </label>
-                    <input style="text-align: center" id="codeStudent" type="text" placeholder="Repetir contraseña"
+                    <input style="text-align: center" id="RepeatPassword" type="password" placeholder="Repetir contraseña"
                         required name="RepeatPassword" />
                 </li>
             </ul>
