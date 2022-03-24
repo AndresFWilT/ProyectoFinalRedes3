@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=e, initial-scale=1.0" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
-    <title>Home</title>
+    <title>Email main</title>
 </head>
 
 <body>
@@ -24,7 +24,6 @@
             <li class="list-group-item">Correo: {{user[1][3]}}</li>
         </ul>
     </div>
-    </br></br></br></br>
     <div class="col-auto p-5 text-center">
         <form action="/viewSendMail" method="post">
             <div class="row text-center">
@@ -45,25 +44,35 @@
                 </div>
             </div>
         </form>
-        <form action="/viewMail" method="post">
-            <div class="row text-center">
-                <div class="col-sm-6">
-                    <div class="card">
-                        <div class="card-body">
+        <div class="row text-center">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/viewReciebedMail" method="post">
                             <h5 class="card-title text-center">Visualizar</h5>
                             <p class="card-text">Visualizar los correos que han llegado a tu cuenta</p>
-                            <input style="text-align: center" id="email" type="hidden" name="names"
+                            <input style="text-align: center" id="email" type="hidden" name="email"
                                 value="{{user[1][3]}}" required />
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                                    Visualizar correo
+                                    Visualizar correos recibidos
                                 </button>
                             </div>
-                        </div>
+                        </form>
+                        <form action="/viewSentMail" method="post">
+                            <p class="card-text">Visualizar los correos que has enviado desde tu cuenta</p>
+                            <input style="text-align: center" id="email" type="hidden" name="email"
+                                value="{{user[1][3]}}" required />
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
+                                    Visualizar correos enviados
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </body>
 

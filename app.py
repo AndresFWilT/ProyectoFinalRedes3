@@ -178,6 +178,74 @@ def view_mail_main():
       message = "algo salio mal"
     return render_template('login.html')
 
+# Path for view visualize reciebed mails
+@app.route('/viewReciebedMail', methods=['POST'])
+def view_reciebed_mail():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('reciebedMail.html', user=user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html', email=_email)
+
+# Path for view visualize sent mails
+@app.route('/viewSentMail', methods=['POST'])
+def view_sent_mail():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('sentMail.html', user=user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html', email=_email)
+
 # Path for view send mail
 @app.route('/viewSendMail', methods=['POST'])
 def view_send_mail():
@@ -210,7 +278,7 @@ def view_send_mail():
         message = "No pudimos hacer su solicitud"
     except:
       message = "algo salio mal"
-    return render_template('sendMail.html', email=_email)
+    return render_template('login.html', email=_email)
 
 # Path for sending an email
 @app.route('/sendMail', methods=['POST'])

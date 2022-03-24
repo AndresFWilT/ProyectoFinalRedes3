@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>enviados</title>
+    <meta charset="UTF-8">
+    </meta>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <form action="/mail" method="post">
+        <input style="text-align: center" id="names" type="hidden" name="names" value="{{user[1][1]}}" required />
+        <input style="text-align: center" id="surnames" type="hidden" name="surnames" value="{{user[1][2]}}" required />
+        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user[1][3]}}" required />
+        <button class="btn btn-secondary text-center text-uppercase" type="submit">
+            Regresar
+        </button>
+    </form>
+    <h1 class='text-center title'>¡Correos enviados!</h1>
+</body>
+
+</html>
