@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=e, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <title>Home</title>
+  </head>
+  <body>
+    <a href="/" class="btn btn-secondary text-center text-uppercase" style="position: fixed; top: 0; left: 0">Salir</a>
+    <h1 class='text-center title'>¡Bienvenido al Sistema de correos SMTP y POP3!</h1>
+    </br></br>
+    <div class="card border-light mb-3" style="width: 18rem;">
+        <div class="card-header text-center">
+          Datos del usuario
+        </div>
+        <ul class="list-group list-group-flush text-center">
+          <li class="list-group-item">Nombres: {{user[1][1]}}</li>
+          <li class="list-group-item">Apellidos: {{user[1][2]}}</li>
+          <li class="list-group-item">Correo: {{user[1][3]}}</li>
+        </ul>
+      </div>
+    </br></br></br></br>
+    <div class="row text-center">
+      <div class="col-sm-6">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title text-center">Enviar</h5>
+                  <p class="card-text">Envia correos desde tu cuenta</p>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                  <a href="/SendMail" class="btn btn-outline-success text-center text-uppercase">Redactar un correo</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-sm-6">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title text-center">Visualizar</h5>
+                  <p class="card-text">Visualiza los correos que te han llegado a tu correo</p>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                      <a href="/viewMails" class="btn btn-outline-primary text-center text-uppercase">Mira los correos</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

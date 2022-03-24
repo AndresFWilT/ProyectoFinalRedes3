@@ -2,10 +2,9 @@ from flask import Flask, render_template, request
 from flask_mail import Mail, Message
 from config import DevelopmentConfig
 import cx_Oracle
-import json, rsa, os
+import json
 
 import smtplib
-
 
 # Global
 app = Flask(__name__)
@@ -96,8 +95,10 @@ def logging_user():
     _email = request.form['emailAddress']
     _password = request.form['password']
     try:
-      # Query para extrar la contraseña de la BD
+      # Query for the password for the DB
       sqlGetPass = f"""SELECT u.password FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
       # Bring the credentials from JSON to use in DB
       cdtls = get_credentials_db()
       try:
@@ -113,6 +114,9 @@ def logging_user():
         # fetch to get password
         fetch = cur.fetchall()[0]
         password = fetch[0]
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
         # closing cursor
         cur.close()
         # closing connection
@@ -120,7 +124,7 @@ def logging_user():
         if password == _password:
           # succesfull message
           message = "Ingresando"
-          return render_template('login.html',message = message)
+          return render_template('mail.html',user = user)
         else:
           # succesfull message
           message = "Datos no coinciden"
@@ -131,9 +135,9 @@ def logging_user():
         #   error message for view
         message = "No pudimos hacer su solicitud"
     except:
-      message = "Algo salio mal"
+      message = "No encontramos tu cuenta"
       return render_template('register.html',message = message)  
-    return render_template('bandeja.html',message = message)  
+    return render_template('login.html',message = message)  
 
 # Path for register template
 @app.route('/register')
@@ -185,6 +189,12 @@ def register_user():
       message = "Algo salio mal"
       return render_template('register.html',message = message)  
     return render_template('register.html',message = message) 
+
+# Path for view mail user
+@app.route('/mail')
+def view_mail_main():
+  message = ""
+  return render_template('mail.html', message = message)
 
 #  Method that comprobe the passwords
 def comprobePasswords(p1,p2):
