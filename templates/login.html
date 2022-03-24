@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=e, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+  <title>Login</title>
+</head>
+
+<body>
+  <h1 class="text-center title">Ingresa a tu cuenta</h1>
+  <br />
+  <div class="card text-center" style="width: 18rem; margin: auto">
+    <form action="/saveStudent" method="post">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <label> Direcci&oacute;n de correo electronico </label>
+          <input style="text-align: center" id="emailAddress" placeholder="Ingresa tu correo" type="email"
+            name="emailAddress" required />
+        </li>
+      </ul>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <label> Contraseña </label>
+          <input style="text-align: center" id="codeStudent" type="text" placeholder="Ingresa tu contraseña" required
+            name="password" />
+        </li>
+      </ul>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <button class="btn btn-primary" type="submit">
+            Ingresar
+          </button>
+        </li>
+      </ul>
+    </form>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <p class="font-weight-normal">¿No tienes cuenta? <a href="/register">Registrate aqu&iacute;</a></p>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
