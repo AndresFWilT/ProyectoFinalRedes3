@@ -10,10 +10,11 @@
 </head>
 
 <body>
+  <h4 class="text-center title">{{message}}</h1>
   <h1 class="text-center title">Ingresa a tu cuenta</h1>
   <br />
   <div class="card text-center" style="width: 18rem; margin: auto">
-    <form action="/saveStudent" method="post">
+    <form action="/loginUser" method="post">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <label> Direcci&oacute;n de correo electronico </label>
@@ -24,7 +25,7 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <label> Contraseña </label>
-          <input style="text-align: center" id="codeStudent" type="text" placeholder="Ingresa tu contraseña" required
+          <input style="text-align: center" id="codeStudent" type="password" placeholder="Ingresa tu contraseña" required
             name="password" />
         </li>
       </ul>
