@@ -196,6 +196,12 @@ def view_mail_main():
   message = ""
   return render_template('mail.html', message = message)
 
+# Path for view send mail
+@app.route('/sendMail',methods=['POST'])
+def view_send_mail():
+  if request.method == 'POST':
+    a = 2
+
 #  Method that comprobe the passwords
 def comprobePasswords(p1,p2):
   if p1 == p2:
