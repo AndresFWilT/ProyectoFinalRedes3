@@ -26,14 +26,14 @@
     </div>
     </br></br></br></br>
     <div class="col-auto p-5 text-center">
-        <form action="/sendMail" method="post">
+        <form action="/viewSendMail" method="post">
             <div class="row text-center">
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title text-center">Enviar</h5>
                             <p class="card-text">Envia correos desde tu cuenta</p>
-                            <input style="text-align: center" id="email" type="hidden" name="names"
+                            <input style="text-align: center" id="email" type="hidden" name="email"
                                 value="{{user[1][3]}}" required />
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button class="btn btn-outline-success text-center text-uppercase" type="submit">

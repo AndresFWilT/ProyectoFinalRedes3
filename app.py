@@ -191,16 +191,110 @@ def register_user():
     return render_template('register.html',message = message) 
 
 # Path for view mail user
-@app.route('/mail')
+@app.route('/mail',methods=['POST'])
 def view_mail_main():
-  message = ""
-  return render_template('mail.html', message = message)
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('mail.html',user = user)  
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html')
 
 # Path for view send mail
-@app.route('/sendMail',methods=['POST'])
+@app.route('/viewSendMail',methods=['POST'])
 def view_send_mail():
+  # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    a = 2
+    _email = request.form["email"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        return render_template('sendMail.html',user = user)  
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('sendMail.html', email = _email)
+
+# Path for sending an email
+@app.route('/sendMail',methods=['POST'])
+def send_mail():
+  # From POST method, we request the inputs from the view
+  if request.method == 'POST':
+    _email = request.form["emailAddress"]
+    _emailDes = request.form["emailDes"]
+    _message = request.form["texto"]
+    try:
+      # Query for bring the data of the user
+      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
+      # Bring the credentials from JSON to use in DB
+      cdtls = get_credentials_db()
+      try:
+        print("Entra a la conexion")
+        # Connection
+        connection = cx_Oracle.connect(
+          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
+        cur = connection.cursor()
+        # executing Query for user
+        cur.execute(sqlGetUser)
+        user = cur.fetchall()
+        # closing cursor
+        cur.close()
+        # closing connection
+        connection.close()
+        ## Logic to send mail
+
+        return render_template('mail.html', user = user)
+      except cx_Oracle.Error as error:
+        print('Error occurred:')
+        print(error)
+        #   error message for view
+        message = "No pudimos hacer su solicitud"
+    except:
+      message = "algo salio mal"
+    return render_template('login.html')
 
 #  Method that comprobe the passwords
 def comprobePasswords(p1,p2):
