@@ -318,46 +318,6 @@ def send_mail():
         # creamos un objeto smtp y realizamos el envío:
         smtp = smtplib.SMTP('localhost', 25)
         smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=message)
-        
-        # Logic to send mail 2
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.ehlo()
-        server.starttls()
-        msg = 'Subject: {}\n\n{}'.format("Prueba Redes 3", _message)
-        
-       
-        # ingreso al correo de gmail
-        server.login('correo.base.de.datos.uno@gmail.com', 'basededatosunoprueba123')
-
-        # se envia el correo
-        server.sendmail(_email, _emailDes, msg)
-        server.quit()
-
-        '''
-        # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
-        # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
-        remitente = "Desde prueba <correo.base.de.datos.uno@gmail.com>"
-        destinatario = "Hacia prueba <luisocampo.o.g@gmail.com>"
-        asunto = "E-mal HTML enviado desde Python"
-        mensaje = """Hola!<br/> <br/>
-        Este es un <b>e-mail</b> enviando desde <b>Python</b>
-        """
-
-        # generamos el e-mail con todos los datos definidos anteriormente:
-        email = """From: %s
-        To: %s
-        MIME-Version: 1.0
-        Content-type: text/html
-        Subject: %s
-        %s
-        """ % (remitente, destinatario, asunto, mensaje)
-
-        # creamos un objeto smtp y realizamos el envío:
-        smtp = smtplib.SMTP('localhost')
-        smtp.sendmail(remitente, destinatario, email)
-        '''
-
-        mail.init_app(app)
         return render_template('mail.html', user=user)
       except cx_Oracle.Error as error:
         print('Error occurred:')
