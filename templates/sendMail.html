@@ -12,9 +12,9 @@
 
 <body>
     <form action="/mail" method="post">
-        <input style="text-align: center" id="names" type="hidden" name="names" value="{{user[1][1]}}" required />
-        <input style="text-align: center" id="surnames" type="hidden" name="surnames" value="{{user[1][2]}}" required />
-        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user[1][3]}}" required />
+        <input style="text-align: center" id="names" type="hidden" name="names" value="{{user[0][1]}}" required />
+        <input style="text-align: center" id="surnames" type="hidden" name="surnames" value="{{user[0][2]}}" required />
+        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user[0][3]}}" required />
         <button class="btn btn-secondary text-center text-uppercase" type="submit">
             Regresar
         </button>
@@ -29,7 +29,7 @@
                         <h5 class="card-title" style="font-weight:bold">Remitente</h5>
                         <label for="exampleInputEmail1">Tu direccion de correo electronico</label>
                         <input class="text-center form-control" id="emailAddress" type="text" name="emailAddress"
-                            value="{{user[1][3]}}" required readonly/>
+                            value="{{user[0][3]}}" required readonly/>
                         <small id="emailHelp" class="form-text text-muted">Jamas compartiremos tu correo con otras
                             personas.</small>
                     </div>
@@ -52,9 +52,16 @@
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" id="texto" name="texto" required></textarea>
         </div>
         <div class="form-group text-center">
-        <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-            Enviar
-        </button>
+        <form class="form-group" action="/sendSMTP">
+            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
+                Enviar por SMTP
+            </button>
+        </form>
+        <form class="form-group" action="/sendPOP3">
+            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
+                Enviar por POP3
+            </button>
+        </form>
         </div>
     </form>
 </body>

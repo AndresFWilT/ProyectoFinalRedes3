@@ -75,7 +75,10 @@ def logging_user():
         cur.close()
         # closing connection
         connection.close()
-        if password == _password:
+
+        if str(password) == str(_password):
+
+          print(user)
           # succesfull message
           message = "Ingresando"
           return render_template('mail.html', user=user)
@@ -88,8 +91,7 @@ def logging_user():
         print(error)
         #   error message for view
         message = "No pudimos hacer su solicitud"
-    except:
-      message = "No encontramos tu cuenta"
+    except Exception as message:
       return render_template('register.html', message=message)
     return render_template('login.html', message=message)
 
@@ -249,10 +251,12 @@ def view_sent_mail():
 # Path for view send mail
 @app.route('/viewSendMail', methods=['POST'])
 def view_send_mail():
+  
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
     _email = request.form["email"]
     try:
+      
       # Query for bring the data of the user
       sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
       # Bring the credentials from JSON to use in DB
@@ -268,6 +272,7 @@ def view_send_mail():
         user = cur.fetchall()
         # closing cursor
         cur.close()
+        print(user)
         # closing connection
         connection.close()
         return render_template('sendMail.html', user=user)
@@ -276,9 +281,9 @@ def view_send_mail():
         print(error)
         #   error message for view
         message = "No pudimos hacer su solicitud"
-    except:
-      message = "algo salio mal"
-    return render_template('login.html', email=_email)
+    except Exception as message:
+      return render_template('login.html', message=message)
+    return render_template('login.html',)
 
 # Path for sending an email
 @app.route('/sendMail', methods=['POST'])
