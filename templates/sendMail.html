@@ -11,6 +11,9 @@
 </head>
 
 <body>
+    {% if message %}
+        <h5>{{message}}</h5>
+    {% endif %}
     <form action="/mail" method="post">
         <input style="text-align: center" id="usuario" type="hidden" name="usuario" value="{{user["usuario"]}}" required />
         <input style="text-align: center" id="email" type="hidden" name="email" value="{{user["email"]}}" required />
@@ -27,7 +30,7 @@
                     <div class="card-body">
                         <h5 class="card-title" style="font-weight:bold">Remitente</h5>
                         <label for="exampleInputEmail1">Tu direccion de correo electronico</label>
-                        <input class="text-center form-control" id="emailAddress" type="text" name="emailAddress"
+                        <input class="text-center form-control" id="emailAddress" type="text" name="emailOrigin"
                             value="{{user["email"]}}" required readonly/>
                         <small id="emailHelp" class="form-text text-muted">Jamas compartiremos tu correo con otras
                             personas.</small>
@@ -39,28 +42,25 @@
                     <div class="card-body">
                         <h5 class="card-title" style="font-weight:bold">Destinatario</h5>
                         <label for="exampleInputEmail1">Escribe la direccion de correo del destinatario</label>
-                        <input class="text-center form-control" id="emailDes" type="text" name="emailDes"
-                            placeholder="Escribe el correo destinatario" required />
+                        <input class="text-center form-control" id="emailDes" type="text" name="emailDestination"
+                            placeholder="Escribe el correo destinatario" value="usuario01@redestres.udistrital.edu.co" required />
                         <small id="emailHelp" class="form-text text-muted">Preparate para redactar el correo</small>
                     </div>
                 </div>
             </div>
         </div>
+        <input style="text-align: center" id="usuario" type="hidden" name="usuario" value="{{user["usuario"]}}" required />
+        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user["email"]}}" required />
         <div class="form-group">
             <label class="text-center" style="font-weight: bold;">Escribe un mensaje</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" id="texto" name="texto" required></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" id="message" name="message" required></textarea>
         </div>
         <div class="form-group text-center">
-        <form class="form-group" action="/sendSMTP">
-            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                Enviar por SMTP
-            </button>
-        </form>
-        <form class="form-group" action="/sendPOP3">
-            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                Enviar por POP3
-            </button>
-        </form>
+            <div class="form-group>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-info">Enviar correo por SMTP</button>
+                </div>
+            </div>
         </div>
     </form>
 </body>

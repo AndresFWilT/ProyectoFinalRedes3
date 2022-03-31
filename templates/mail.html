@@ -41,7 +41,7 @@
                       <h5 class="card-title text-center">Enviar</h5>
                       <p class="card-text">Envia correos desde tu cuenta</p>
                       <input style="text-align: center" id="email" type="hidden" name="email"
-                          value="{{user["correo"]}}" required />
+                          value="{{user["email"]}}" required />
                       <input style="text-align: center" id="usuario" type="hidden" name="usuario"
                           value="{{user["usuario"]}}" required />
                       <div class="btn-group" role="group" aria-label="Basic example">
@@ -64,7 +64,7 @@
                     <form action="/viewSentMail" method="post">
                         <p class="card-text">Visualizar los correos que has enviado desde tu cuenta</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user["correo"]}}" required />
+                            value="{{user["email"]}}" required />
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
                                 Visualizar correos enviados
@@ -74,7 +74,7 @@
                     <form action="/viewReciebedMail" method="post">
                         <p class="card-text">Visualizar los correos que han llegado a tu cuenta</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user["correo"]}}" required />
+                            value="{{user["email"]}}" required />
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
                                 Visualizar correos recibidos
