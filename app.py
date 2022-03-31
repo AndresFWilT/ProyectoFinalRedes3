@@ -237,8 +237,8 @@ def get_credentials_db():
 def show_emails():    
     mails = open('/var/spool/mail/usuario01', 'r').read()
     ind_mails = mails.split("|||")
-    print(type(ind_mails))    
+    return ind_mails
   
 if __name__ == '__main__':
-    show_emails()
+    print(show_emails())
     app.run(debug=True)
