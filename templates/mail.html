@@ -19,17 +19,10 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text">Nombres: <i> {{user[0][1]}} {{user[0][2]}} </i></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-text">Correo: <i> {{user[0][3]}} </i></p>
+                  <p class="card-text">Usuario: <i> {{user["usuario"]}} </i></p>
                 </div>
               </div>
             </div>
@@ -48,7 +41,9 @@
                       <h5 class="card-title text-center">Enviar</h5>
                       <p class="card-text">Envia correos desde tu cuenta</p>
                       <input style="text-align: center" id="email" type="hidden" name="email"
-                          value="{{user[0][3]}}" required />
+                          value="{{user["correo"]}}" required />
+                      <input style="text-align: center" id="usuario" type="hidden" name="usuario"
+                          value="{{user["usuario"]}}" required />
                       <div class="btn-group" role="group" aria-label="Basic example">
                           <button class="btn btn-outline-success text-center text-uppercase" type="submit">
                               Redactar correo
@@ -69,7 +64,7 @@
                     <form action="/viewSentMail" method="post">
                         <p class="card-text">Visualizar los correos que has enviado desde tu cuenta</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user[0][3]}}" required />
+                            value="{{user["correo"]}}" required />
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
                                 Visualizar correos enviados
@@ -79,7 +74,7 @@
                     <form action="/viewReciebedMail" method="post">
                         <p class="card-text">Visualizar los correos que han llegado a tu cuenta</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user[0][3]}}" required />
+                            value="{{user["correo"]}}" required />
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
                                 Visualizar correos recibidos
