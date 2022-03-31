@@ -1,3 +1,4 @@
+from re import I
 from flask import Flask, render_template, request
 from config import DevelopmentConfig
 import json
@@ -318,7 +319,7 @@ def send_mail():
         from_addr = "Desde prueba <correox@redestres.udistrital.edu.co>"
         to_addr = "Hacia prueba <usuario01@redestres.udistrital.edu.co>"
 
-        message = "Hola! Este es un e-mail enviando desde Python"
+        message = "Hola! Este es un e-mail enviando desde Python" + "\n|||"
 
         # creamos un objeto smtp y realizamos el envío:
         smtp = smtplib.SMTP('localhost', 25)
@@ -349,5 +350,12 @@ def get_credentials_db():
     f.close
     return db
 
+
+def show_emails():    
+    mails = open('/var/spool/mail/usuario01', 'r').read()
+    ind_mails = mails.split("|||")
+    print(type(ind_mails))    
+  
 if __name__ == '__main__':
+    show_emails()
     app.run(debug=True)
