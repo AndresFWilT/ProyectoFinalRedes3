@@ -1,4 +1,3 @@
-from re import I
 from flask import Flask, render_template, request
 from config import DevelopmentConfig
 import json
@@ -7,6 +6,10 @@ import smtplib
 import getpass
 import poplib
 import cx_Oracle
+import os
+from subprocess import call
+import getpass, poplib
+
 
 # Global
 app = Flask(__name__)
@@ -239,6 +242,20 @@ def show_emails():
     ind_mails = mails.split("|||")
     return ind_mails
   
+  
+def get_emails_with_pop3():
+    user = 'usuario01' 
+    Mailbox = poplib.POP3('localhost', '110') 
+    Mailbox.user(user) 
+    Mailbox.pass_('1234') 
+    numMessages = len(Mailbox.list()[1])
+    print(Mailbox.list())
+    for i in range(numMessages):
+        for msg in Mailbox.retr(i+1)[1]:
+            print(msg) 
+            pass
+    Mailbox.quit()
+  
 if __name__ == '__main__':
-    print(show_emails())
+    print(p())
     app.run(debug=True)
