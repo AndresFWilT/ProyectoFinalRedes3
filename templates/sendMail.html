@@ -12,9 +12,8 @@
 
 <body>
     <form action="/mail" method="post">
-        <input style="text-align: center" id="names" type="hidden" name="names" value="{{user[0][1]}}" required />
-        <input style="text-align: center" id="surnames" type="hidden" name="surnames" value="{{user[0][2]}}" required />
-        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user[0][3]}}" required />
+        <input style="text-align: center" id="usuario" type="hidden" name="usuario" value="{{user["usuario"]}}" required />
+        <input style="text-align: center" id="email" type="hidden" name="email" value="{{user["email"]}}" required />
         <button class="btn btn-secondary text-center text-uppercase" type="submit">
             Regresar
         </button>
@@ -29,7 +28,7 @@
                         <h5 class="card-title" style="font-weight:bold">Remitente</h5>
                         <label for="exampleInputEmail1">Tu direccion de correo electronico</label>
                         <input class="text-center form-control" id="emailAddress" type="text" name="emailAddress"
-                            value="{{user[0][3]}}" required readonly/>
+                            value="{{user["email"]}}" required readonly/>
                         <small id="emailHelp" class="form-text text-muted">Jamas compartiremos tu correo con otras
                             personas.</small>
                     </div>

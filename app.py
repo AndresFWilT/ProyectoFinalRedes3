@@ -46,54 +46,25 @@ def index():
 def logging_user():
   if request.method == 'POST':
     # From POST method, we request the inputs from the view
-    _email = request.form['emailAddress']
+    _user = request.form['user']
     _password = request.form['password']
     try:
-      # Query for the password for the DB
-      sqlGetPass = f"""SELECT u.password FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # Execute Querys
-        cur.execute(sqlGetPass)
-        # making commit for connection
-        connection.commit()
-        # fetch to get password
-        fetch = cur.fetchall()[0]
-        password = fetch[0]
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        # closing connection
-        connection.close()
-
-        if str(password) == str(_password):
-
-          print(user)
-          # succesfull message
-          message = "Ingresando"
-          return render_template('mail.html', user=user)
-        else:
-          # succesfull message
-          message = "Datos no coinciden"
-          return render_template('login.html', message=message)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      user = {
+        "usuario":"usuario01",
+        "correo":"correox@redes3.udistrital.edu.co",
+        "contra":"clave01"
+      }
+      if user["usuario"] == _user and user["contra"] == _password:
+        print("datos correctos")
+        # succesfull message
+        message = "Ingresando"
+        return render_template('mail.html', user=user)
+      else:
+        # succesfull message
+        message = "Datos no coinciden"
+        return render_template('login.html', message=message)
     except Exception as message:
-      return render_template('register.html', message=message)
-    return render_template('login.html', message=message)
+      return render_template('login.html', message=message)
 
 # Path for register template
 @app.route('/register')
@@ -141,8 +112,7 @@ def register_user():
           message = "Lo sentimos no pudimos agregar al usuario al sistema"
       else:
         message = "contraseñas no coinciden"
-    except:
-      message = "Algo salio mal"
+    except Exception as message:
       return render_template('register.html', message=message)
     return render_template('register.html', message=message)
 
@@ -151,31 +121,13 @@ def register_user():
 def view_mail_main():
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    _email = request.form["email"]
+    user = {
+      "email":request.form["email"],
+      "usuario":request.form["usuario"]
+    }
+    
     try:
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        # closing connection
-        connection.close()
-        return render_template('mail.html', user=user)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      return render_template('mail.html', user=user)
     except:
       message = "algo salio mal"
     return render_template('login.html')
@@ -185,105 +137,44 @@ def view_mail_main():
 def view_reciebed_mail():
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    _email = request.form["email"]
+    user = {
+      "email":request.form["email"],
+      "usuario":request.form["usuario"]
+    }
     try:
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        # closing connection
-        connection.close()
-        return render_template('reciebedMail.html', user=user)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      return render_template('reciebedMail.html', user=user)
     except:
       message = "algo salio mal"
-    return render_template('login.html', email=_email)
+    return render_template('login.html')
 
 # Path for view visualize sent mails
 @app.route('/viewSentMail', methods=['POST'])
 def view_sent_mail():
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    _email = request.form["email"]
+    user = {
+      "email":request.form["email"],
+      "usuario":request.form["usuario"]
+    }
     try:
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        # closing connection
-        connection.close()
-        return render_template('sentMail.html', user=user)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      return render_template('sentMail.html', user=user)
     except:
       message = "algo salio mal"
-    return render_template('login.html', email=_email)
+    return render_template('login.html')
 
 # Path for view send mail
 @app.route('/viewSendMail', methods=['POST'])
 def view_send_mail():
-  
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    _email = request.form["email"]
+    user = {
+      "email":request.form["email"],
+      "usuario":request.form["usuario"]
+    }
     try:
-      
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        print(user)
-        # closing connection
-        connection.close()
-        return render_template('sendMail.html', user=user)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      return render_template('sendMail.html', user=user)
     except Exception as message:
-      return render_template('login.html', message=message)
-    return render_template('login.html',)
+      return render_template('login.html',message=message)
 
 # Path for sending an email
 @app.route('/sendMail', methods=['POST'])
@@ -369,16 +260,8 @@ def send_mail():
         print(error)
         #   error message for view
         message = "No pudimos hacer su solicitud"
-    except:
-      message = "algo salio mal"
-    return render_template('login.html')
-
-#  Method that comprobe the passwords
-def comprobePasswords(p1,p2):
-  if p1 == p2:
-    return True
-  else:
-    return False
+    except Exception as message:
+      return render_template('login.html',message=message)
 
 # Get credentials
 def get_credentials_db():
