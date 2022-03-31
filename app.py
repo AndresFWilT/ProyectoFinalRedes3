@@ -52,7 +52,7 @@ def logging_user():
     try:
       user = {
         "usuario":"usuario01",
-        "correo":"correox@redes3.udistrital.edu.co",
+        "email":"correox@redes3.udistrital.edu.co",
         "contra":"clave01"
       }
       if user["usuario"] == _user and user["contra"] == _password:
@@ -128,6 +128,7 @@ def view_mail_main():
     }
     
     try:
+      print(show_emails())
       return render_template('mail.html', user=user)
     except:
       message = "algo salio mal"
@@ -173,6 +174,7 @@ def view_send_mail():
       "usuario":request.form["usuario"]
     }
     try:
+      print(user)
       return render_template('sendMail.html', user=user)
     except Exception as message:
       return render_template('login.html',message=message)
@@ -182,47 +184,38 @@ def view_send_mail():
 def send_mail():
   # From POST method, we request the inputs from the view
   if request.method == 'POST':
-    _email = request.form["emailAddress"]
-    _emailDes = request.form["emailDes"]
-    _message = request.form["texto"]
+    _Or = request.form["emailOrigin"]
+    _Des = request.form["emailDestination"]
+    _message = request.form["message"]
+    user = {
+      "email":request.form["emailOrigin"],
+      "usuario":request.form["usuario"]
+    }
     try:
-      # Query for bring the data of the user
-      sqlGetUser = f"""SELECT * FROM USUARIO u WHERE u.email like '%{_email}%'"""
-      # Bring the credentials from JSON to use in DB
-      cdtls = get_credentials_db()
-      try:
-        print("Entra a la conexion")
-        # Connection
-        connection = cx_Oracle.connect(
-          f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-        cur = connection.cursor()
-        # executing Query for user
-        cur.execute(sqlGetUser)
-        user = cur.fetchall()
-        # closing cursor
-        cur.close()
-        # closing connection
-        connection.close()
-        # Logic to send mail 1
+      # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
+      # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
         
-        # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
-        # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
-        from_addr = "Desde prueba <correox@redestres.udistrital.edu.co>"
-        to_addr = "Hacia prueba <usuario01@redestres.udistrital.edu.co>"
+      print("Impresion de valores")
+      print(_Or)
+      print(_Des)
+      print(_message)
 
-        message = "Hola! Este es un e-mail enviando desde Python" + "\n|||"
+      from_addr = f"""Desde prueba <{_Or}>"""
+      to_addr = f"""Hacia prueba <{_Des}>"""
+      _message = _message + "|||||"
 
-        # creamos un objeto smtp y realizamos el envío:
-        smtp = smtplib.SMTP('localhost', 25)
-        smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=message)
-        return render_template('mail.html', user=user)
-      except cx_Oracle.Error as error:
-        print('Error occurred:')
-        print(error)
-        #   error message for view
-        message = "No pudimos hacer su solicitud"
+      print(from_addr)
+      print(user)
+
+      # creamos un objeto smtp y realizamos el envío:
+      smtp = smtplib.SMTP('localhost', 25)
+      smtp.sendmail(from_addr=from_addr, to_addrs=to_addr, msg=_message)
+      message = "Correo enviado"
+      return render_template('mail.html', user=user,message=message)
     except Exception as message:
-      return render_template('login.html',message=message)
+        print('Error occurred:')
+        print(message)
+  return render_template('login.html',message=message,user=user)
 
 # Get credentials
 def get_credentials_db():
@@ -234,11 +227,11 @@ def get_credentials_db():
     return db
 
 
-def show_emails():    
+def show_emails():   
+    print("Mostrando correos") 
     mails = open('/var/spool/mail/usuario01', 'r').read()
-    ind_mails = mails.split("|||")
+    ind_mails = mails.split("|||||")
     return ind_mails
   
 if __name__ == '__main__':
-    print(show_emails())
     app.run(debug=True)
