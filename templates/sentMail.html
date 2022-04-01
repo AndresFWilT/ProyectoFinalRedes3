@@ -10,15 +10,15 @@
 <body>
   <form action="/mail" method="POST">
     <input style="text-align: center"
-           id="names"
+           id="email"
            type="hidden"
-           name="names"
+           name="email"
            value="{{ user["email"] }}"
            required/>
     <input style="text-align: center"
-           id="surnames"
+           id="usuario"
            type="hidden"
-           name="surnames"
+           name="usuario"
            value="{{ user["usuario"] }}"
            required/>   
     <button class="btn btn-secondary text-center text-uppercase" type="submit">Regresar</button>

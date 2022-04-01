@@ -1,14 +1,7 @@
 from flask import Flask, render_template, request
 from config import DevelopmentConfig
-import json
-import os
 import smtplib
-import getpass
 import poplib
-import cx_Oracle
-import os
-from subprocess import call
-import getpass
 import poplib
 
 
@@ -16,36 +9,14 @@ import poplib
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 
-# Path for dataBase connection Oracle
-
-
-@app.route('/con')
-def connection():
-    #   getting credentials from the method get_credentials_db
-    cdtls = get_credentials_db()
-    print(f"Credentials: {cdtls}")
-    #   making connection from impor cx_oracle, and passing the parameters into the dicctionary for conecction
-    connection = cx_Oracle.connect(
-        f'{cdtls["user"]}/{cdtls["psswrd"]}@{cdtls["host"]}:{cdtls["port"]}/{cdtls["db"]}')
-    # making the cursor
-    cur = connection.cursor()
-    #   probing connection
-    cur.execute("SELECT 'Hello, World from Oracle DB!' FROM DUAL")
-    col = cur.fetchone()[0]
-    cur.close()
-    connection.close()
-    return col
 
 # Default server path
-
-
 @app.route('/')
 def init():
     return index()
 
+
 # Path for login view
-
-
 @app.route('/login')
 def index():
     message = ""
@@ -60,22 +31,19 @@ def logging_user():
         _user = request.form['user']
         _password = request.form['password']
         try:
+            
+            Mailbox = poplib.POP3('localhost', '110')
+            Mailbox.user(_user)
+            Mailbox.pass_(_password)
             user = {
-                "usuario": "usuario01",
+                "usuario": _user,
                 "email": "correox@redes3.udistrital.edu.co",
-                "contra": "clave01"
+                "contra": _password
             }
-            if user["usuario"] == _user and user["contra"] == _password:
-                print("datos correctos")
-                # succesfull message
-                message = "Ingresando"
-                return render_template('mail.html', user=user)
-            else:
-                # succesfull message
-                message = "Datos no coinciden"
-                return render_template('login.html', message=message)
+            # succesfull message
+            return render_template('mail.html', user=user)
         except Exception as message:
-            return render_template('login.html', message=message)
+            return render_template('login.html', message='No se pudo autenticar')
 
 
 # Path for view mail user
@@ -95,7 +63,6 @@ def view_mail_main():
         return render_template('login.html')
 
 
-
 # Path for view visualize sent mails
 @app.route('/viewSentMail', methods=['POST'])
 def view_sent_mail():
@@ -107,7 +74,6 @@ def view_sent_mail():
         }
         emails = get_emails_with_pop3()
         return render_template('sentMail.html', user=user, emails=emails)
-        
 
 
 # Path for view send mail
@@ -124,14 +90,14 @@ def view_send_mail():
         except Exception as message:
             return render_template('login.html', message=message)
 
+
 # Path for sending an email
-
-
 @app.route('/sendMail', methods=['POST'])
 def send_mail():
     # From POST method, we request the inputs from the view
     if request.method == 'POST':
         _Or = request.form["emailOrigin"]
+        print(_Or)
         _Des = request.form["emailDestination"]
         _message = request.form["message"]
         user = {
@@ -170,7 +136,6 @@ def get_emails_with_pop3():
     Mailbox.user(user)
     Mailbox.pass_('1234')
     numMessages = len(Mailbox.list()[1])
-    print(Mailbox.retr(1))
     emails = []
     for i in range(numMessages):
         email_p = []
@@ -182,5 +147,4 @@ def get_emails_with_pop3():
 
 
 if __name__ == '__main__':
-    get_emails_with_pop3()
     app.run(debug=True)

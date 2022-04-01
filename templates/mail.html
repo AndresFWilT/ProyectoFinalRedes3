@@ -39,11 +39,11 @@
                 <div class="card-body">
                   <form action="/viewSendMail" method="post">
                       <h5 class="card-title text-center">Enviar</h5>
-                      <p class="card-text">Envia correos desde tu cuenta</p>
+                      <p class="card-text">Envia correos desde tu cuenta usando el protocolo SMTP</p>
                       <input style="text-align: center" id="email" type="hidden" name="email"
-                          value="{{user["email"]}}" required />
+                          value="{{ user["email"] }}" required />
                       <input style="text-align: center" id="usuario" type="hidden" name="usuario"
-                          value="{{user["usuario"]}}" required />
+                          value="{{ user["usuario"] }}" required />
                       <div class="btn-group" role="group" aria-label="Basic example">
                           <button class="btn btn-outline-success text-center text-uppercase" type="submit">
                               Redactar correo
@@ -62,7 +62,7 @@
                   <div class="card-body">
                     <h5 class="card-title text-center">Visualizar</h5>
                     <form action="/viewSentMail" method="post">
-                        <p class="card-text">Visualizar los correos que has enviado desde tu cuenta</p>
+                        <p class="card-text">Visualizar los correos que has enviado usando el protocolo POP3</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
                             value="{{ user["email"] }}" required />
                         <input style="text-align: center" id="usuario" type="hidden" name="usuario"
