@@ -64,23 +64,15 @@
                     <form action="/viewSentMail" method="post">
                         <p class="card-text">Visualizar los correos que has enviado desde tu cuenta</p>
                         <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user["email"]}}" required />
+                            value="{{ user["email"] }}" required />
+                        <input style="text-align: center" id="usuario" type="hidden" name="usuario"
+                            value="{{ user["usuario"] }}" required />
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                                Visualizar correos enviados
+                                Visualizar correos
                             </button>
                         </div>
-                    </form>
-                    <form action="/viewReciebedMail" method="post">
-                        <p class="card-text">Visualizar los correos que han llegado a tu cuenta</p>
-                        <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{user["email"]}}" required />
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                                Visualizar correos recibidos
-                            </button>
-                        </div>
-                    </form>
+                    </form>                  
                   </div>
                 </div>
               </div>
@@ -88,5 +80,6 @@
           </div>
         </div>
     </div>
+    
     </body>
 </html>
