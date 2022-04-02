@@ -38,7 +38,7 @@ def logging_user():
             user = {
                 "usuario": _user,
                 "email": "correox@redes3.udistrital.edu.co",
-                "contra": _password
+                "pass": _password
             }
             # succesfull message
             return render_template('mail.html', user=user)
@@ -53,9 +53,9 @@ def view_mail_main():
     if request.method == 'POST':
         user = {
             "email": request.form["email"],
-            "usuario": request.form["usuario"]
+            "usuario": request.form["usuario"],
+            "pass": request.form["password"]
         }
-
         try:
             return render_template('mail.html', user=user)
         except:
@@ -70,9 +70,10 @@ def view_sent_mail():
     if request.method == 'POST':
         user = {
             "email": request.form["email"],
-            "usuario": request.form["usuario"]
+            "usuario": request.form["usuario"],
+            "pass": request.form["password"]
         }
-        emails = get_emails_with_pop3()
+        emails = get_emails_with_pop3(user["usuario"],user["pass"])
         return render_template('sentMail.html', user=user, emails=emails)
 
 
@@ -83,7 +84,8 @@ def view_send_mail():
     if request.method == 'POST':
         user = {
             "email": request.form["email"],
-            "usuario": request.form["usuario"]
+            "usuario": request.form["usuario"],
+            "pass": request.form["password"]
         }
         try:
             return render_template('sendMail.html', user=user)
@@ -102,7 +104,8 @@ def send_mail():
         _message = request.form["message"]
         user = {
             "email": request.form["emailOrigin"],
-            "usuario": request.form["usuario"]
+            "usuario": request.form["usuario"],
+            "pass": request.form["password"]
         }
         try:
             # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
@@ -130,11 +133,10 @@ def send_mail():
     return render_template('login.html', message=message, user=user)
 
 
-def get_emails_with_pop3():
-    user = 'usuario01'
+def get_emails_with_pop3(user,passw):
     Mailbox = poplib.POP3('localhost', '110')
     Mailbox.user(user)
-    Mailbox.pass_('1234')
+    Mailbox.pass_(passw)
     numMessages = len(Mailbox.list()[1])
     emails = []
     for i in range(numMessages):
