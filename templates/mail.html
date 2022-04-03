@@ -1,88 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=e, initial-scale=1.0" />
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
-    <title>Email main</title>
-</head>
-<body>
-    <a href="/" class="btn btn-secondary text-center text-uppercase" style="position: fixed; top: 0; left: 0">Salir</a>
-    <h1 class='text-center title'>¡Bienvenido al Sistema de correos SMTP y POP3!</h1>
-    </br></br>
-    <div class="card text-center">
-        <div class="card-header">
-          <b>Datos del usuario</b>    
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-text">Usuario: <i> {{user["usuario"]}} </i></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <title>Gestionar emails</title>
+  </head>
+  <body>
+    <a href="/logout"
+       class="btn btn-secondary text-center text-uppercase"
+       style="position: fixed; top: 0; left: 0">Salir</a>
+    <h1 class="text-center title">¡Bienvenido al Sistema de correos SMTP y POP3!</h1>
+  </br>
+  </br>
+  <div class="card text-center">
+    <div class="card-header">
+      <b>Datos del usuario</b>
     </div>
-    <div class="card text-center">
-        <div class="card-header">
-          <b>Funcionalidades</b>
-        </div>
-        <div class="row text-center">
-            <div class="col">
-              <div class="card">
-                <div class="card-body">
-                  <form action="/viewSendMail" method="post">
-                      <h5 class="card-title text-center">Enviar</h5>
-                      <p class="card-text">Envia correos desde tu cuenta usando el protocolo SMTP</p>
-                      <input style="text-align: center" id="email" type="hidden" name="email"
-                          value="{{ user["email"] }}" required />
-                      <input style="text-align: center" id="usuario" type="hidden" name="usuario"
-                          value="{{ user["usuario"] }}" required />
-                      <input style="text-align: center" id="password" type="password" placeholder="Ingresa tu contraseña" required
-                          name="password" />
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                          <button class="btn btn-outline-success text-center text-uppercase" type="submit">
-                              Redactar correo
-                          </button>
-                      </div>
-                  </form>
-                </div>
-              </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">
+                Usuario: <i> {{ user["usuario"] }} </i>
+              </p>
             </div>
           </div>
-        <div class="card-body">
-          <div class="col-auto text-center">
-            <div class="row">
-              <div class="col">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title text-center">Visualizar</h5>
-                    <form action="/viewSentMail" method="post">
-                        <p class="card-text">Visualizar los correos que has enviado usando el protocolo POP3</p>
-                        <input style="text-align: center" id="email" type="hidden" name="email"
-                            value="{{ user["email"] }}" required />
-                        <input style="text-align: center" id="usuario" type="hidden" name="usuario"
-                            value="{{ user["usuario"] }}" required />
-                        <input style="text-align: center" id="password" type="password" placeholder="Ingresa tu contraseña" required
-                            name="password" />
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button class="btn btn-outline-primary text-center text-uppercase" type="submit">
-                                Visualizar correos
-                            </button>
-                        </div>
-                    </form>                  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card text-center">
+    <div class="card-header">
+      <b>Funcionalidades</b>
+    </div>
+    <div class="row text-center">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <form action="/viewSendMail" method="GET">
+              <h5 class="card-title text-center">Enviar</h5>
+              <p class="card-text">
+                Envia correos desde tu cuenta usando el protocolo SMTP
+              </p>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-outline-success text-center text-uppercase"
+                        type="submit">Redactar correo</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="col-auto text-center">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-center">Visualizar</h5>
+                <form action="/viewSentMail" method="GET">
+                  <p class="card-text">
+                    Visualizar los correos que has enviado usando el protocolo POP3
+                  </p>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button class="btn btn-outline-primary text-center text-uppercase"
+                            type="submit">Visualizar correos</button>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>

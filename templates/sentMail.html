@@ -1,28 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>enviados</title>
+    <title>Emails enviados</title>
     <meta charset="UTF-8">
   </meta>
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"/>
 </head>
 <body>
-  <form action="/mail" method="POST">
-    <input style="text-align: center"
-           id="email"
-           type="hidden"
-           name="email"
-           value="{{ user["email"] }}"
-           required/>
-    <input style="text-align: center"
-           id="usuario"
-           type="hidden"
-           name="usuario"
-           value="{{ user["usuario"] }}"
-           required/>   
-    <input style="text-align: center" id="password" type="password" placeholder="Ingresa tu contraseña" required
-           name="password" />
+  <form action="/mail" method="GET">    
     <button class="btn btn-secondary text-center text-uppercase" type="submit">Regresar</button>
   </form>
   <h1 class = 'text-center title'>Ver correos</h1>

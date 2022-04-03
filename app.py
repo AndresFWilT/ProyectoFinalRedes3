@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
-from config import DevelopmentConfig
+from flask import Flask, render_template, request, session, redirect
+from flask_session import Session
+from config import DevelopmentConfig  
 import smtplib
 import poplib
 import poplib
@@ -40,57 +41,53 @@ def logging_user():
                 "email": "correox@redes3.udistrital.edu.co",
                 "pass": _password
             }
+            session["user"] = _user
+            session["pass"] = _password
+            session["email"] = "correox@redes3.udistrital.edu.co"
             # succesfull message
             return render_template('mail.html', user=user)
         except Exception as message:
             return render_template('login.html', message='No se pudo autenticar')
 
 
+@app.route('/logout')
+def logout():
+    session["user"] = None
+    session["pass"] = None
+    return index()
+
 # Path for view mail user
-@app.route('/mail', methods=['POST'])
+@app.route('/mail', methods=['GET'])
 def view_mail_main():
-    # From POST method, we request the inputs from the view
-    if request.method == 'POST':
+    if request.method == 'GET':
+        if not session.get("user") and session.get("pass"):
+            return redirect("/login")
         user = {
-            "email": request.form["email"],
-            "usuario": request.form["usuario"],
-            "pass": request.form["password"]
+            "usuario": session.get("user")
         }
-        try:
-            return render_template('mail.html', user=user)
-        except:
-            message = "algo salio mal"
-        return render_template('login.html')
+        return render_template('mail.html', user=user)
 
 
 # Path for view visualize sent mails
-@app.route('/viewSentMail', methods=['POST'])
+@app.route('/viewSentMail', methods=['GET'])
 def view_sent_mail():
     # From POST method, we request the inputs from the view
-    if request.method == 'POST':
-        user = {
-            "email": request.form["email"],
-            "usuario": request.form["usuario"],
-            "pass": request.form["password"]
-        }
-        emails = get_emails_with_pop3(user["usuario"],user["pass"])
-        return render_template('sentMail.html', user=user, emails=emails)
+    if request.method == 'GET':
+        if not session.get("user") and session.get("pass"):
+            return redirect("/login")
+        emails = get_emails_with_pop3(session.get("user"),session.get("pass"))
+        return render_template('sentMail.html', user=session.get("user"), emails=emails)
 
 
 # Path for view send mail
-@app.route('/viewSendMail', methods=['POST'])
+@app.route('/viewSendMail', methods=['GET'])
 def view_send_mail():
     # From POST method, we request the inputs from the view
-    if request.method == 'POST':
-        user = {
-            "email": request.form["email"],
-            "usuario": request.form["usuario"],
-            "pass": request.form["password"]
-        }
-        try:
-            return render_template('sendMail.html', user=user)
-        except Exception as message:
-            return render_template('login.html', message=message)
+    if request.method == 'GET':
+        if not session.get("user") and session.get("pass"):
+            return redirect("/login")
+
+        return render_template('sendMail.html', email=session.get("email"))
 
 
 # Path for sending an email
@@ -99,28 +96,19 @@ def send_mail():
     # From POST method, we request the inputs from the view
     if request.method == 'POST':
         _Or = request.form["emailOrigin"]
-        print(_Or)
         _Des = request.form["emailDestination"]
         _message = request.form["message"]
         user = {
             "email": request.form["emailOrigin"],
-            "usuario": request.form["usuario"],
-            "pass": request.form["password"]
+            "usuario": session.get("user"),
+            "pass": session.get("pass")
         }
         try:
-            # PRUEBA DE ENVIO SMTP CON SERVIDOR LOCAL
+            # ENVIO SMTP CON SERVIDOR LOCAL
             # definimos las variables necesarias para el envío del mensaje (remitente, destinatario, asunto y mensaje -en formato HTML-):
-
-            print("Impresion de valores")
-            print(_Or)
-            print(_Des)
-            print(_message)
 
             from_addr = f"""Remitente <{_Or}>"""
             to_addr = f"""Destinatario <{_Des}>"""
-
-            print(from_addr)
-            print(user)
 
             # creamos un objeto smtp y realizamos el envío:
             smtp = smtplib.SMTP('localhost', 25)
@@ -130,6 +118,7 @@ def send_mail():
         except Exception as message:
             print('Error occurred:')
             print(message)
+    message = "Error"
     return render_template('login.html', message=message, user=user)
 
 
